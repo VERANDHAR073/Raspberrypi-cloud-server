@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raspberry Pi Cloud Setup</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <h1>Raspberry Pi Cloud Storage Setup</h1>
+      <div class="logos">
+        <img src="https://upload.wikimedia.org/wikipedia/en/c/cb/Raspberry_Pi_Logo.svg" alt="Raspberry Pi Logo" />
+        <img src="nextcloud.jpeg" alt="Nextcloud Logo" />
+        <img src="tailscale.png" alt="Tailscale Logo" />
+      </div>
+      <nav>
+        <a href="#mounting">Mount HDD</a>
+        <a href="#nextcloud">Nextcloud</a>
+        <a href="#tailscale">Tailscale</a>
+        <a href="#hosting">Host Online</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="mounting">
+      <h2>Mounting the Harddisk to the Raspberry Pi</h2>
+      <div class="step">STEP 1: Format the Harddisk</div>
+      <div class="command">lsblk</div>
+      <div class="command">sudo fdisk -l</div>
+      <div class="command">sudo mkdir /mnt/mydrive</div>
+      <div class="command">sudo mount /dev/sda1 /mnt/mydrive</div>
+      <div class="command">sudo mount -t auto /dev/sda1 /mnt/mydrive</div>
+      <div class="command">sudo chown -R pi:pi /mnt/mydrive</div>
+      <div class="command">sudo nano /etc/fstab</div>
+      <div class="command">df -h</div>
+    </section>
+
+    <section id="nextcloud">
+      <h2>Nextcloud Setup</h2>
+      <div class="step">Step 1: Update System Packages</div>
+      <div class="command">sudo apt update && sudo apt upgrade -y</div>
+      <div class="step">Step 2: Install Apache, MariaDB, PHP</div>
+      <div class="command">sudo apt install apache2 -y</div>
+      <div class="command">sudo systemctl enable apache2</div>
+      <div class="command">sudo systemctl start apache2</div>
+      <div class="command">sudo apt install mariadb-server -y</div>
+      <div class="command">sudo mysql_secure_installation</div>
+      <div class="command">sudo apt install php libapache2-mod-php php-mysql php-xml php-mbstring php-zip php-curl php-gd php-intl php-bcmath -y</div>
+      <div class="step">Step 3: Create Database</div>
+      <div class="command">sudo mysql -u root -p</div>
+      <div class="command">CREATE DATABASE nextcloud;</div>
+      <div class="command">CREATE USER 'nextclouduser'@'localhost' IDENTIFIED BY 'password';</div>
+      <div class="command">GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextclouduser'@'localhost';</div>
+      <div class="command">FLUSH PRIVILEGES;</div>
+      <div class="command">EXIT;</div>
+      <div class="step">Step 4: Download & Extract Nextcloud</div>
+      <div class="command">cd /tmp</div>
+      <div class="command">wget https://download.nextcloud.com/server/releases/latest.zip</div>
+      <div class="command">sudo apt install unzip</div>
+      <div class="command">unzip latest.zip</div>
+      <div class="command">sudo mv nextcloud /var/www/html/</div>
+      <div class="step">Step 5: Set Permissions</div>
+      <div class="command">sudo chown -R www-data:www-data /var/www/html/nextcloud</div>
+      <div class="command">sudo chmod -R 755 /var/www/html/nextcloud</div>
+    </section>
+
+    <section id="tailscale">
+      <h2>Tailscale Setup</h2>
+      <div class="step">Step 1: Update Your System</div>
+      <div class="command">sudo apt update && sudo apt upgrade -y</div>
+      <div class="step">Step 2: Install Tailscale</div>
+      <div class="command">curl -fsSL https://tailscale.com/install.sh | sh</div>
+      <div class="step">Step 3: Start and Enable Tailscale</div>
+      <div class="command">sudo tailscale up</div>
+      <div class="command">sudo systemctl enable tailscaled</div>
+    </section>
+
+    <section id="hosting">
+      <h2>Hosting the Cloud Online (Tailscale Funnel)</h2>
+      <div class="step">Step 1: Run a Local Server</div>
+      <div class="command">python3 -m http.server 3000</div>
+
+      <div class="step">Step 2: Start Funnel</div>
+      <div class="command">sudo tailscale funnel 3000</div>
+      <div class="command"># OR</div>
+      <div class="command">sudo tailscale funnel 80</div>
+      <div class="command">https://rkraspberrypi.yourtailnetname.ts.net</div>
+
+      <div class="step">Step 3: Add Trusted Domain in Nextcloud Config</div>
+      <div class="command">sudo nano /var/www/nextcloud/config/config.php</div>
+      <div class="command">Add your ip in the nano</div>
+      <div class="command">'trusted_domains' => array (//add your ip and url
+0 => '192.168.33.135',
+1 => '192.168.76.135',
+2 => '100.68.238.13',
+3 => '172.16.0.66',
+4 => '192.168.130.135',
+5 => 'rkraspberrypi.tail6f52bf.ts.net',
+),</div>
+
+      <div class="step">Step 4: Restart Apache2</div>
+      <div class="command">sudo systemctl restart apache2</div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Raspberry Pi Cloud Storage Guide
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
